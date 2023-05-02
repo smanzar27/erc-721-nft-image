@@ -9,15 +9,16 @@ const web3 = createAlchemyWeb3(API_URL);
 const contract = require("../artifacts/contracts/MyNFT.sol/MyNFT.json");
 //console.log(JSON.stringify(contract.abi));
 
-const contractAddress = "0x2AE158DDc1682fB0ecB462f6eCE96856f0b05B65";
+const contractAddress = "0xaa0f2cD2603036308bB9C64bef50DD27031ac3a8";
 const nftContract = new web3.eth.Contract(contract.abi, contractAddress);
 
-console.log(nftContract);
+//console.log(nftContract);
 
 async function mintNFT(tokenURI : any) {
 
     const nonce = await web3.eth.getTransactionCount(PUBLIC_KEY, "latest"); //get latest nonce
 
+    console.log(tokenURI);
     //the transaction
     const tx = { 
         from: PUBLIC_KEY,

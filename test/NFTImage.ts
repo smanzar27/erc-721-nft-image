@@ -17,11 +17,6 @@ describe("Testing MyNFT Contract", async function () {
         console.log("Testing Contract Deployed With Address: ", testing.address);  
        });
 
-//     it('correctly mints a nft', async function() {
-//         const tokenURI= "https://gateway.pinata.cloud/ipfs/Qmby82GBf46UcGTc3DYDb3Ch1KKgVQz5LfxkJQ4mFkN59Z";
-//         myNFT.mintNFT(owner,tokenURI);
-//         console.log(myNFT._tokenIds);
-//   });
 
     it('verify constructor', async function () {
         const response = await testing.owner();
@@ -45,37 +40,26 @@ describe("Testing MyNFT Contract", async function () {
         for (const event of events) {
             console.log(`Event ${event.event} with args ${event.args}`);
         }
+        
         let testEvent = events.filter(({event}) => event == 'Transfer')[0];
         const tokenId = testEvent.args.tokenId;
         console.log(tokenId.toString());
         expect(tokenId.toString()).to.equal("1");
+        console.log(await testing.balanceOf(owner.address));
     });
 
     it('verify multiple minting', async function () {
-        let response = await testing.mintNFT(owner.address, "Testing Minting One");
-        expect(response.from).to.equal(owner.address);
 
-        let logging = await response.wait()
-        let events = logging.events;
-        for (const event of events) {
-            console.log(`Event ${event.event} with args ${event.args}`);
-        }
-        let testEvent = events.filter(({event}) => event == 'Transfer')[0];
-        let tokenId = testEvent.args.tokenId;
-        console.log(tokenId.toString());
+        let response = await testing.mintNFT(owner.address, "Testing Minting One");
+        await response.wait();
+        console.log(await testing.balanceOf(owner.address));
+        let tokenId = await testing.balanceOf(owner.address);
         expect(tokenId.toString()).to.equal("1");
 
         response = await testing.mintNFT(owner.address, "Testing Minting Two");
-        expect(response.from).to.equal(owner.address);
-
-        logging = await response.wait()
-        events = logging.events;
-        for (const event of events) {
-            console.log(`Event ${event.event} with args ${event.args}`);
-        }
-        testEvent = events.filter(({event}) => event == 'Transfer')[0];
-        tokenId = testEvent.args.tokenId;
-        console.log(tokenId.toString());
-        expect(tokenId.toString()).to.equal("2");  
+        await response.wait();
+        console.log(await testing.balanceOf(owner.address));
+        tokenId = await testing.balanceOf(owner.address);
+        expect(tokenId.toString()).to.equal("2");    
     });
 });

@@ -24,7 +24,7 @@ async function mintNFT(tokenURI : any) {
         from: PUBLIC_KEY,
         to: contractAddress,
         nonce: nonce,
-        gas: 500000,
+        gas: 200000,
         data: nftContract.methods.mintNFT(PUBLIC_KEY, tokenURI).encodeABI(),
     };
 
